@@ -1,6 +1,13 @@
 version: 0.2
 
 phases:
+  install:
+    commands:
+      - apt-get update
+      - apt install jq
+      - aws ecs describe-task-definition --task-definition green-blue-ecs-example | \
+        jq '.taskDefinition' > taskdef.json
+      - envsubst < appspec_template.yaml > appspec.yaml
   pre_build:
     commands:
       - echo Logging in to Amazon ECR...
