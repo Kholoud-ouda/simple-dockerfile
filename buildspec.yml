@@ -5,7 +5,7 @@ phases:
     commands:
       - apt-get update
       - apt install jq
-      - aws ecs describe-task-definition --task-definition $TASK_DEFINITION | \
+      - aws ecs describe-task-definition --task-definition provisioning-task | \
         jq '.taskDefinition' > taskdef.json
       - envsubst < appspec_template.yaml > appspec.yaml
   pre_build:
