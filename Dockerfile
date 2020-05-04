@@ -1,11 +1,23 @@
 #FROM - Image to start building on.
 FROM ubuntu:14.04
 
-#MAINTAINER - Identifies the maintainer of the dockerfile.
-MAINTAINER ian.miell@gmail.com
+RUN \
+  add-apt-repository -y ppa:nginx/stable && \
+  apt-get update && \
+  apt-get install -y nginx && \
+  rm -rf /var/lib/apt/lists/* && \
+  echo "\ndaemon off;" >> /etc/nginx/nginx.conf && \
+  chown -R www-data:www-data /var/lib/nginx
 
-#RUN - Runs a command in the container
-RUN echo "Hello world" > /tmp/hello_world.txt
+# Define mountable directories.
+VOLUME ["/etc/nginx/sites-enabled", "/etc/nginx/certs", "/etc/nginx/conf.d", "/var/log/nginx", "/var/www/html"]
 
-#CMD - Identifies the command that should be used by default when running the image as a container.
-CMD ["cat", "/tmp/hello_world.txt"]
+# Define working directory.
+WORKDIR /etc/nginx
+
+# Define default command.
+CMD ["nginx"]
+
+# Expose ports.
+EXPOSE 80
+EXPOSE 443
