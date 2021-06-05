@@ -1,16 +1,11 @@
 pipeline {
   agent any
   stages {
-  stage('Clone Code') {
-      steps {
-        checkout scm 
-      }
-    }
-  stage('Stage 2') {
-      steps {
-        agent {
+  stage('Build') {
+      agent {
           docker { image 'node:14-alpine' }
         }
+      steps {
         script {
           sh 'docker build .'
         }
